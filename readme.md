@@ -1,25 +1,43 @@
-Creating A Wallet
-{
-"first_name": "rashmita",
-"last_name": "Patra",
-"ewallet_reference_id": "rashmita-Patra-05252021",
-"type": "person",
-"phone_number": "+918984557378",
-"email": "rashmitapatra105@gmail.com"
-}
+## Creating A Wallet
 
-Money Transfer Between Wallet
-{
-"source_ewallet": "ewallet_a92e82e3ab701557893001f4c56900ee",
-"amount": "100",
-"currency": "EUR",
-"destination_ewallet": "ewallet_f4430ea8873785b33479615eecf137d0",
-}
+### http://localhost:3000/ewallet
+### Example Json Data 
 
-Money Transfer Confirmation
+ ```sh
 {
-"id": "3565bd85-c384-11eb-b38b-02240218ee6d", // This can be used only one time
-"status": "accept"
+  "first_name": "rashmita",
+  "last_name": "Patra",
+  "ewallet_reference_id": "rashmita-Patra-05252021",
+  "type": "person",
+  "phone_number": "+918984557378",
+  "email": "rashmitapatra105@gmail.com"
 }
+  ```
+
+
+## Money Transfer Between Wallet
+### http://localhost:3000/transfer
+
+### Example Json Data 
+
+ ```sh
+{
+  "source_ewallet": "ewallet_a92e82e3ab701557893001f4c56900ee",
+  "amount": "100",
+  "currency": "EUR",
+  "destination_ewallet": "ewallet_f4430ea8873785b33479615eecf137d0",
+}
+```
+
+## Money Transfer Confirmation
+### http://localhost:3000/confirmation
+### Example Json Data 
+
+ ```sh
+{
+  "id": "3565bd85-c384-11eb-b38b-02240218ee6d", // This can be used only one time
+  "status": "accept"
+}
+```
 
 
