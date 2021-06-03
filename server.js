@@ -12,8 +12,34 @@ var access_key = process.env.ACCESS_KEY;
 var secret_key = process.env.SECRET_KEY;
 
 
+/// Country Deatails !!!!
+// var body = ""
+// var to_sign = 'get' + '/v1/data/countries' + salt + timestamp + access_key + secret_key + body;
+// var signature = CryptoJS.enc.Hex.stringify(CryptoJS.HmacSHA256(to_sign, secret_key));
+// signature = CryptoJS.enc.Base64.stringify(CryptoJS.enc.Utf8.parse(signature));
 
-// Creating A Wallet
+// request({
+//     headers: {
+//         'access_key': access_key,
+//         'signature': signature,
+//         'salt': salt,
+//         'timestamp': timestamp,
+//         'Content-Type': "application/\json",
+
+//     },
+//     uri: 'https://sandboxapi.rapyd.net/v1/data/countries',
+//     method: 'GET',
+//     body: body
+// }, function (err, res, body) {
+//     response = JSON.parse(res.body)
+//     console.log(response.data.filter(country => country.name === "India"))
+
+// }
+// );
+
+
+
+// --------------------------- Creating A Wallet --------------------------- \\
 app.post("/ewallet", function (req, res) {
     var { first_name, last_name, ewallet_reference_id, type, phone_number, email } = req.body;
     var body = {
@@ -22,7 +48,7 @@ app.post("/ewallet", function (req, res) {
         "ewallet_reference_id": ewallet_reference_id,
         "type": type,
         "phone_number": phone_number,
-        "email": email
+        "email": email,
     }
     body = JSON.stringify(body)
     var to_sign = 'post' + '/v1/user' + salt + timestamp + access_key + secret_key + body;
@@ -48,7 +74,7 @@ app.post("/ewallet", function (req, res) {
 })
 
 
-// Money Transfer Between Wallet
+// --------------------------- Money Transfer Between Wallet --------------------------- \\
 app.post("/transfer", function (req, res) {
     var { source_ewallet, amount, currency, destination_ewallet } = req.body;
 
@@ -82,7 +108,7 @@ app.post("/transfer", function (req, res) {
     });
 })
 
-// Money Transfer Confirmation
+// --------------------------- Money Transfer Confirmation --------------------------- \\
 app.post("/confirmation", function (req, res) {
     var { id } = req.body;
     var body = {
@@ -114,11 +140,12 @@ app.post("/confirmation", function (req, res) {
 })
 
 
-// List Transactions of a particular e-wallet
-app.get("/list", function (req, res) {
-    // var {id, status } = req.body;
+// --------------------------- List Transactions of a particular e-wallet --------------------------- \\
+app.get("/listTransactions", function (req, res) {
+    // var {ewallet_id } = req.body;
+    var ewallet_id = "ewallet_8a695b403979fb788f59acf134b7e30b"
     var body = ""
-    var to_sign = 'get' + '/v1/user/ewallet_8a695b403979fb788f59acf134b7e30b/transactions' + salt + timestamp + access_key + secret_key + body;
+    var to_sign = 'get' + `/v1/user/${ewallet_id}/transactions` + salt + timestamp + access_key + secret_key + body;
     var signature = CryptoJS.enc.Hex.stringify(CryptoJS.HmacSHA256(to_sign, secret_key));
     signature = CryptoJS.enc.Base64.stringify(CryptoJS.enc.Utf8.parse(signature));
 
@@ -131,13 +158,46 @@ app.get("/list", function (req, res) {
     }
     request({
         headers: headers,
-        uri: 'https://sandboxapi.rapyd.net/v1/user/ewallet_8a695b403979fb788f59acf134b7e30b/transactions',
+        uri: `https://sandboxapi.rapyd.net/v1/user/${ewallet_id}/transactions`,
         method: 'GET',
         body: body
     }, function (err, res, body) {
         // console.log(res.body)
         response = JSON.parse(res.body)
         console.log(response.data)
+    });
+})
+
+// --------------------------- Checkout --------------------------- \\
+app.post("/checkout", function (req, res) {
+    var { amount, country, currency } = req.body;
+    var body = {
+        "amount": amount,
+        "country": country,
+        "currency": currency
+    }
+
+    body = JSON.stringify(body)
+    console.log(body)
+    var to_sign = 'post' + '/v1/checkout' + salt + timestamp + access_key + secret_key + body;
+    var signature = CryptoJS.enc.Hex.stringify(CryptoJS.HmacSHA256(to_sign, secret_key));
+    signature = CryptoJS.enc.Base64.stringify(CryptoJS.enc.Utf8.parse(signature));
+
+    var headers = {
+        'access_key': access_key,
+        'signature': signature,
+        'salt': salt,
+        'timestamp': timestamp,
+        'Content-Type': "application/\json",
+    }
+    request({
+        headers: headers,
+        uri: 'https://sandboxapi.rapyd.net/v1/checkout',
+        method: 'POST',
+        body: body
+    }, function (err, res, body) {
+        response = JSON.parse(res.body)
+        console.log("Redirect The User To This Url",response.data.redirect_url);
     });
 })
 
