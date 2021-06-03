@@ -51,7 +51,7 @@
 
 ```sh
 {
-    "amount": 100,
+    "amount": "100",
     "country": "US",
     "currency": "USD"
 }
@@ -62,6 +62,35 @@
 ```sh
 https://sandboxcheckout.rapyd.net?token=checkout_ed691aefafc97716078d6da8306d2aa8
 
+```
+
+## Wallet Details
+
+### http://localhost:3000/walletDetails
+
+### Example Body Data
+
+```sh
+{
+ "ewallet_id" : "ewallet_8a695b403979fb788f59acf134b7e30b"
+}
+```
+
+### Example Response Data
+
+```sh
+[
+    {
+        id: 'cont_09e9c60bf24bcfdaf5d2a8579a5393a8',
+        first_name: 'Gopinath',
+        last_name: 'Patra',
+        contact_type: 'personal',
+        phone_number: '+919437167624',
+        email: 'gopinathpatra105@gmail.com',
+        ewallet: 'ewallet_8a695b403979fb788f59acf134b7e30b',
+        created_at: 1622618122,
+    }
+]
 ```
 
 ## List of transactions for a particular wallet

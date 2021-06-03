@@ -140,10 +140,38 @@ app.post("/confirmation", function (req, res) {
 })
 
 
+
+// --------------------------- Retrieve Wallet Contact--------------------------- \\
+
+app.post("/walletDetails", function (req, res) {
+    var { ewallet_id } = req.body;
+    var body = ""
+    var to_sign = 'get' + `/v1/ewallets/${ewallet_id}/contacts` + salt + timestamp + access_key + secret_key + body;
+    var signature = CryptoJS.enc.Hex.stringify(CryptoJS.HmacSHA256(to_sign, secret_key));
+    signature = CryptoJS.enc.Base64.stringify(CryptoJS.enc.Utf8.parse(signature));
+
+    var headers = {
+        'access_key': access_key,
+        'signature': signature,
+        'salt': salt,
+        'timestamp': timestamp,
+        'Content-Type': "application/\json",
+    }
+    request({
+        headers: headers,
+        uri: `https://sandboxapi.rapyd.net/v1/ewallets/${ewallet_id}/contacts`,
+        method: 'GET',
+        body: body
+    }, function (err, res, body) {
+        response = JSON.parse(res.body)
+        console.log(response.data)
+    });
+})
+
+
 // --------------------------- List Transactions of a particular e-wallet --------------------------- \\
-app.get("/listTransactions", function (req, res) {
-    // var {ewallet_id } = req.body;
-    var ewallet_id = "ewallet_8a695b403979fb788f59acf134b7e30b"
+app.post("/listTransactions", function (req, res) {
+    var { ewallet_id } = req.body;
     var body = ""
     var to_sign = 'get' + `/v1/user/${ewallet_id}/transactions` + salt + timestamp + access_key + secret_key + body;
     var signature = CryptoJS.enc.Hex.stringify(CryptoJS.HmacSHA256(to_sign, secret_key));
@@ -197,7 +225,7 @@ app.post("/checkout", function (req, res) {
         body: body
     }, function (err, res, body) {
         response = JSON.parse(res.body)
-        console.log("Redirect The User To This Url",response.data.redirect_url);
+        console.log("Redirect The User To This Url", response.data.redirect_url);
     });
 })
 
