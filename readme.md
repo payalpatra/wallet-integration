@@ -95,6 +95,12 @@ https://sandboxcheckout.rapyd.net?token=checkout_ed691aefafc97716078d6da8306d2aa
 
 ## List of transactions for a particular wallet
 
+```sh
+{
+ "ewallet_id" : "ewallet_8a695b403979fb788f59acf134b7e30b"
+}
+```
+
 ### http://localhost:3000/listTransactions
 
 ### Example Response Data
